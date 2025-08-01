@@ -9,33 +9,32 @@ from TOOLS.getbin import *
 from .response import *
 from .gate import *
 
+
 async def get_proxy_format():
-    # Use asyncio.to_thread to run the blocking I/O operation in a separate thread
     return await asyncio.to_thread(_get_proxy_format)
+
 
 def _get_proxy_format():
     import random
     getproxy = random.choice(open("FILES/proxy.txt", "r", encoding="utf-8").read().splitlines())
-    proxy_ip = getproxy.split(":")[0]
-    proxy_port = getproxy.split(":")[1]
-    proxy_user = getproxy.split(":")[2]
-    proxy_password = getproxy.split(":")[3]
+    proxy_ip, proxy_port, proxy_user, proxy_password = getproxy.split(":")
     proxies = {
         "https://": f"http://{proxy_user}:{proxy_password}@{proxy_ip}:{proxy_port}",
         "http://": f"http://{proxy_user}:{proxy_password}@{proxy_ip}:{proxy_port}",
     }
     return proxies
 
+
 async def check_proxy_status(proxies):
-    # Placeholder function to check if the proxy is live or dead
-    # Implement your logic here to check the proxy status
-    return True  # Change this to actual check
+    # Placeholder: replace with real check if needed
+    return True
+
 
 @Client.on_message(filters.command("so", [".", "/"]))
-async def so_auth_cmd(Client, message):
+async def so_auth_cmd(client: Client, message):
     try:
         user_id = str(message.from_user.id)
-        checkall = await check_all_thing(Client, message)
+        checkall = await check_all_thing(client, message)
 
         gateway = "Shopify [9.53$]"
         cmd = "/so"
@@ -78,7 +77,7 @@ Usage: {cmd} cc|month|year|cvv</b>"""
 - [仝] 𝐑𝐞𝐬𝐩𝐨𝐧𝐬𝐞 - ■■□□
 """
         await asyncio.sleep(0.5)
-        secondchk = await Client.edit_message_text(message.chat.id, firstchk.id, secondresp)
+        secondchk = await client.edit_message_text(message.chat.id, firstchk.id, secondresp)
 
         start = time.perf_counter()
         proxies = await get_proxy_format()
@@ -97,10 +96,10 @@ Usage: {cmd} cc|month|year|cvv</b>"""
 - [仝] 𝐑𝐞𝐬𝐩𝐨𝐧𝐬𝐞 - ■■■■
 """
         await asyncio.sleep(0.5)
-        thirdcheck = await Client.edit_message_text(message.chat.id, secondchk.id, thirdresp)
+        thirdcheck = await client.edit_message_text(message.chat.id, secondchk.id, thirdresp)
 
         brand = getbin[0]
-        type = getbin[1]
+        card_type = getbin[1]
         level = getbin[2]
         bank = getbin[3]
         country = getbin[4]
@@ -108,7 +107,8 @@ Usage: {cmd} cc|month|year|cvv</b>"""
         currency = getbin[6]
 
         proxy_status = "𝑷𝒓𝒐𝒙𝒚 𝑳𝒊𝒗𝒆✅" if await check_proxy_status(proxies) else "𝑷𝒓𝒐𝒙𝒚 𝑫𝒆𝒂𝒅❌"
-finalresp = f"""
+
+        finalresp = f"""
 {status}
 {status}
 ━━━━━━━━━━━━━━━
@@ -117,7 +117,7 @@ finalresp = f"""
 [ﾒ] Response ➺ ⤿ {response} ⤾
 ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━
 [ﾒ] Bin ➺ {bin_code}
-[ﾒ] Info ➺ {brand} - {type} - {level}
+[ﾒ] Info ➺ {brand} - {card_type} - {level}
 [ﾒ] Bank ➺ {bank}
 [ﾒ] Country ➺ {country} - {flag} - {currency}
 [ﾒ] VBV ➺ {vbv_status}
@@ -128,13 +128,14 @@ finalresp = f"""
 [ﾒ] T/t ➺ [{time.perf_counter() - start:0.2f} seconds] | P/x ➺ [{proxy_status}]
 """
         await asyncio.sleep(0.5)
-        await Client.edit_message_text(message.chat.id, thirdcheck.id, finalresp)
+        await client.edit_message_text(message.chat.id, thirdcheck.id, finalresp)
         await setantispamtime(user_id)
         await deductcredit(user_id)
         if status == "𝐀𝐩𝐩𝐫𝐨𝐯𝐞𝐝 ✅":
             await sendcc(finalresp, session)
         await session.aclose()
 
-    except Exception as e:
+    except Exception:
         import traceback
         await error_log(traceback.format_exc())
+        
