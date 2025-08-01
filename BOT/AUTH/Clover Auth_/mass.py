@@ -94,11 +94,11 @@ async def stripe_mass_auth_cmd(Client, message):
         sec = int(seconds)
 
         text += f"""
-╚━━━━━━━━━━━━━
-[ϟ] T/t : {time.perf_counter() - start:0.2f}s
-[ϟ] 𝗖𝗵𝗲𝗸𝗲𝗱 𝗯𝘆: <a href='tg://user?id={message.from_user.id}'> {message.from_user.first_name}</a> [ {role} ]
-[ϟ] 𝗢𝘄𝗻𝗲𝗿: <a href="tg://user?id=7941175119">ᶻⒺ𝓡𝐎</a>
-╚━━━━━━「𝐀𝐏𝐏𝐑𝐎𝐕𝐄𝐃 𝐂𝐇𝐄𝐂𝐊𝐄𝐑」━━━━━━╝
+━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━
+[ﾒ] Checked By ➺ <a href='tg://user?id={message.from_user.id}'> {message.from_user.first_name}</a> [ {role} ]
+[ﾒ] Dev ➺ ⏤‌‌‌‌ <a href="tg://user?id=7941175119">ᶻⒺ𝓡𝐎</a>
+━━━━━━━━━━━━━━━
+[ﾒ] T/t ➺ [{time.perf_counter() - start:0.2f} seconds] | P/x ➺ [{proxy_status}]
 """
         await Client.edit_message_text(message.chat.id, nov.id, text)
         await massdeductcredit(user_id, len(ccs))
