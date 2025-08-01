@@ -38,7 +38,7 @@ async def mchkfunc(fullcc, user_id):
                 return f"<code>{fullcc}</code>\n<b>Result - DECLINED ❌</b>\n"
 
 
-@Client.on_message(filters.command("stb", [".", "/"]))
+@Client.on_message(filters.command("mstb", [".", "/"]))
 def multi(Client, message):
     t1 = threading.Thread(target=bcall, args=(Client, message))
     t1.start()
