@@ -9,20 +9,21 @@ from TOOLS.getbin import *
 from .response import *
 from .gate import *
 
+
 @Client.on_message(filters.command("sg", [".", "/"]))
-async def stripe_auth_cmd(Client, message):
+async def stripe_auth_cmd(client: Client, message):
     try:
         user_id = str(message.from_user.id)
-        checkall = await check_all_thing(Client, message)
+        checkall = await check_all_thing(client, message)
 
         gateway = "Shopify"
 
-        if checkall[0] == False:
+        if not checkall[0]:
             return
 
         role = checkall[1]
         getcc = await getmessage(message)
-        if getcc == False:
+        if not getcc:
             resp = f"""<b>
 Gate Name: {gateway} ♻️
 CMD: /sg
@@ -55,7 +56,7 @@ Usage: /sg cc|month|year|cvv</b>"""
 - [仝] 𝐑𝐞𝐬𝐩𝐨𝐧𝐬𝐞 - ■■■□
 """
         await asyncio.sleep(0.5)
-        secondchk = await Client.edit_message_text(message.chat.id, firstchk.id, secondresp)
+        secondchk = await client.edit_message_text(message.chat.id, firstchk.id, secondresp)
 
         start = time.perf_counter()
         proxies = await get_proxy_format()
@@ -74,17 +75,17 @@ Usage: /sg cc|month|year|cvv</b>"""
 - [仝] 𝐑𝐞𝐬𝐩𝐨𝐧𝐬𝐞 - ■■■■
 """
         await asyncio.sleep(0.5)
-        thirdcheck = await Client.edit_message_text(message.chat.id, secondchk.id, thirdresp)
+        thirdcheck = await client.edit_message_text(message.chat.id, secondchk.id, thirdresp)
 
         brand = getbin[0]
-        type = getbin[1]
+        card_type = getbin[1]
         level = getbin[2]
         bank = getbin[3]
         country = getbin[4]
         flag = getbin[5]
         currency = getbin[6]
 
-finalresp = f"""
+        finalresp = f"""
 {status}
 {status}
 ━━━━━━━━━━━━━━━
@@ -93,7 +94,7 @@ finalresp = f"""
 [ﾒ] Response ➺ ⤿ {response} ⤾
 ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━
 [ﾒ] Bin ➺ {bin_code}
-[ﾒ] Info ➺ {brand} - {type} - {level}
+[ﾒ] Info ➺ {brand} - {card_type} - {level}
 [ﾒ] Bank ➺ {bank}
 [ﾒ] Country ➺ {country} - {flag} - {currency}
 [ﾒ] VBV ➺ {vbv_status}
@@ -104,13 +105,14 @@ finalresp = f"""
 [ﾒ] T/t ➺ [{time.perf_counter() - start:0.2f} seconds] | P/x ➺ [{proxy_status}]
 """
         await asyncio.sleep(0.5)
-        await Client.edit_message_text(message.chat.id, thirdcheck.id, finalresp)
+        await client.edit_message_text(message.chat.id, thirdcheck.id, finalresp)
         await setantispamtime(user_id)
         await deductcredit(user_id)
         if status == "𝐀𝐩𝐩𝐫𝐨𝐯𝐞𝐝 ✅":
             await sendcc(finalresp, session)
         await session.aclose()
 
-    except Exception as e:
+    except Exception:
         import traceback
         await error_log(traceback.format_exc())
+        
