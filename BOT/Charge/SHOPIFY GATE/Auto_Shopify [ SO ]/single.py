@@ -110,7 +110,6 @@ Usage: {cmd} cc|month|year|cvv</b>"""
 
         finalresp = f"""
 {status}
-{status}
 ━━━━━━━━━━━━━━━
 [ﾒ] Card ➺ <code>{fullcc}</code>
 [ﾒ] Gateway ➺ <i>{gateway}</i>
